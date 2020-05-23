@@ -33,19 +33,22 @@
                 {# Кнопка: Информация #}
                 <a href="{{ url_for('projects.project_info', slug=project.slug) }}">
                     <button style="padding-top: 15px; padding-bottom: 15px; font-size: 18px"
-                            type="button" class="btn btn-default btn-block">Информация</button>
+                            type="button" class="btn btn-default btn-block">Информация
+                    </button>
                 </a>
 
                 {# Кнопка: Задания #}
                 <a href="{{ url_for('projects.tasks', slug=project.slug) }}">
                     <button style="padding-top: 15px; padding-bottom: 15px; font-size: 18px"
-                            type="button" class="btn btn-default btn-block">Задания</button>
+                            type="button" class="btn btn-default btn-block">Задания
+                    </button>
                 </a>
 
                 {# Кнопка: Работники #}
                 <a href="{{ url_for('projects.users', slug=project.slug) }}">
                     <button style="padding-top: 15px; padding-bottom: 15px; font-size: 18px"
-                            type="button" class="btn btn-default btn-block">Работники</button>
+                            type="button" class="btn btn-default btn-block">Работники
+                    </button>
                 </a>
             </div>
 
@@ -59,23 +62,35 @@
                 <div class="row" style="margin-bottom: 3px; margin-top: 0px; padding-top: 0px">
                     {# Поле: Работники проекта: #}
                     <div class="col-md-4" style="margin-bottom: 0px; margin-top: 0px; padding-top: 0px">
-                        <p style="color: #000000; padding-top: 5px; padding-left: 10px; font-weight: 900; font-size: 24px">Работники проекта:</p>
+                        <p style="color: #000000; padding-top: 5px; padding-left: 10px; font-weight: 900; font-size: 24px">
+                            Работники проекта:</p>
                     </div>
 
                     {# Кнопка "Присоединиться" для пользователей #}
                     {% if project not in current_user.projects %}
-                        <div class="col-md-3 col-md-offset-5" style="margin-bottom: 1px; margin-top: 1px; padding-top: 0px">
+
+                        <div class="col-md-3 col-md-offset-5"
+                             style="margin-bottom: 1px; margin-top: 1px; padding-top: 0px">
                             <form action="{{ url_for('projects.users', slug=project.slug) }}" method="post">
-                                <button style="margin-top: 0px; padding-top: 10px; padding-bottom: 10px; font-size: 18px"
-                                    type="submit" class="btn btn-default btn-block">Join to us!</button>
+                                {% if project.quantity_participants<project.users.all()|length %}
+                                    <button style="margin-top: 0px; padding-top: 10px; padding-bottom: 10px; font-size: 18px"
+                                            type="submit" class="btn btn-default btn-block" disabled>Max quantity of
+                                        participants is {{ project.quantity_participants }}
+                                    </button>
+                                {% else %}
+                                    <button style="margin-top: 0px; padding-top: 10px; padding-bottom: 10px; font-size: 18px"
+                                            type="submit" class="btn btn-default btn-block">Join to
+                                        us!
+                                    </button>
+                                {% endif %}
                             </form>
                         </div>
                     {% endif %}
                 </div>
 
                 <ul style="color: #000000; padding-left: 10px">{% for user in project.users %}
-                        <li>{{ user.email }}</li>
-                    {% endfor %}
+                    <li>{{ user.email }}</li>
+                {% endfor %}
                 </ul>
 
                 <p style="margin-bottom: 350px"></p>

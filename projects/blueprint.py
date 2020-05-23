@@ -73,14 +73,17 @@ def tasks(slug):
 def users(slug):
     project = Project.query.filter(Project.slug == slug).first_or_404()
 
+    print(project.users.all())
     if request.method == 'POST':
         try:
             if current_user.is_anonymous:
                 return redirect(url_for('login_page') + '?next=' + request.url)
-            user = User.query.filter(User.email == current_user.email).first()
-            user.projects += [project]
-            db.session.add(user)
-            db.session.commit()
+
+            if len(project.users.all()) < project.quantity_participants:
+                user = User.query.filter(User.email == current_user.email).first()
+                user.projects += [project]
+                db.session.add(user)
+                db.session.commit()
         except:
             print(traceback.format_exc())
     if project:
